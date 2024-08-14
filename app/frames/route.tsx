@@ -92,14 +92,8 @@ const handleRequest = frames(async (ctx) => {
   }
 
   const requirements = reveal
-    ? await checkRequirements(
-        { ...hiddenCast, recastRequired: true },
-        message?.castId,
-        userKey
-      )
-    : // TODO
-      // ? await checkRequirements(hiddenCast, message?.castId, userKey)
-      null;
+    ? await checkRequirements(hiddenCast, message?.castId, userKey)
+    : null;
   if (requirements && !requirements.ok) {
     return error(requirements.message || "Requirements not met!");
   }
