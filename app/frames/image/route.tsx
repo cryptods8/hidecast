@@ -35,7 +35,10 @@ function Message({ shown, cast }: { shown: boolean; cast: HideCastResponse }) {
             </div>
           </div>
         )}
-        <div tw="flex p-16" style={{ lineHeight: "1.5", fontFamily: "SpaceGrotesk" }}>
+        <div
+          tw="flex p-16"
+          style={{ lineHeight: "1.5", fontFamily: "SpaceGrotesk" }}
+        >
           {redactedMessage}
         </div>
       </div>
@@ -43,7 +46,7 @@ function Message({ shown, cast }: { shown: boolean; cast: HideCastResponse }) {
   );
 }
 
-export function getRequestUrl(req: NextRequest, allowedQueryParams: string[]) {
+function getRequestUrl(req: NextRequest, allowedQueryParams: string[]) {
   const url = new URL(req.url);
   // remove extra query params
   const urlParams = url.searchParams;
@@ -60,7 +63,7 @@ export function getRequestUrl(req: NextRequest, allowedQueryParams: string[]) {
   return `${baseUrl}${url.pathname}${search ? `?${search}` : ""}`;
 }
 
-export function verifyUrl(req: NextRequest, allowedQueryParams: string[]) {
+function verifyUrl(req: NextRequest, allowedQueryParams: string[]) {
   const url = getRequestUrl(req, allowedQueryParams);
   const verifiedUrl = verifySignedUrl(url);
   return new URL(verifiedUrl);
