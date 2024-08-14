@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
+
+.disabled\:text-action-primary-disabled:disabled {
+  color: #ded9ef;
+}
+.disabled\:bg-action-primary-disabled:disabled {
+  background-color: #bdb2e0;
+}
+.text-default {
+  color: #24292e;
+}
+.border-default {
+  border-color: #d0d1d259;
+}
+.text-faint {
+  color: #8b99a4;
+}
+.bg-action-primary {
+  background-color: #7c65c1;
+}
+.bg-action-primary:hover {
+  background-color: #6944ba;
+}
+.accent-action-primary {
+  accent-color: #7c65c1;
+}
+.accent-action-primary:hover {
+  accent-color: #6944ba;
+}
+.border-action-tertiary {
+  border-color: #efefef;
+}
+.bg-action-tertiary {
+  background-color: #fff;
+}
+.hover\:border-action-tertiary-hover:hover {
+  border-color: #e4e5e5;
+}
+.hover\:bg-action-tertiary-hover:hover {
+  background-color: #efefef;
+}
+@media (prefers-color-scheme: dark) {
+  .hover\:border-action-tertiary-hover:hover {
+    border-color: #49384b;
+  }
+  .hover\:bg-action-tertiary-hover:hover {
+    background-color: #3f3043;
+  }
+  .border-action-tertiary {
+    border-color: #3f3043;
+  }
+  .bg-action-tertiary {
+    background-color: #17101f;
+  }
+  .text-default {
+    color: #fff;
+  }
+  .text-faint {
+    color: #9fa3af;
+  }
+  .border-default {
+    border-color: #4c3a4ec0;
+  }
+  .disabled\:text-action-primary-disabled:disabled {
+    color: #6a6180;
+  }
+  .disabled\:bg-action-primary-disabled:disabled {
+    background-color: #4a3b70;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-end-rgb));
+  background-repeat: repeat-x;
+  height: 100%;
+  width: 100%;
+}
+
+@font-face {
+  font-family: "SpaceGrotesk";
+  font-weight: 400;
+  src: url("../public/SpaceGrotesk-Regular.ttf");
+}
+
+@font-face {
+  font-family: "SpaceGrotesk";
+  font-weight: 700;
+  src: url("../public/SpaceGrotesk-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("../public/Inter-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 500;
+  src: url("../public/Inter-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 600;
+  src: url("../public/Inter-SemiBold.ttf");
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --color-primary: 31 21 55;
+  }
+}
