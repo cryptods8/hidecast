@@ -1,13 +1,12 @@
+import { MessagePropsColumn } from "./db/types";
+
 export interface UserKey {
   identityProvider: "fc" | "xmtp";
   userId: string;
 }
 
-export type HiddenCastRequest = {
+export type HiddenCastRequest = MessagePropsColumn & {
   message: string;
-  likeRequired: boolean | null | undefined;
-  recastRequired: boolean | null | undefined;
-  followRequired: boolean | null | undefined;
   userKey: UserKey | null;
 };
 

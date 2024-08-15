@@ -5,6 +5,7 @@ import { error } from "frames.js/core";
 import { findHiddenCastById } from "@/model/db/repo";
 import { HiddenCastResponse, UserKey } from "@/model/types";
 import { hubHttpUrl, hubRequestOptions } from "@/utils/constants";
+import { checkMoxieFanTokensRequirement } from "./check-moxie-fan-tokens-requirement";
 
 async function safeFetch(url: string, options?: RequestInit) {
   try {
@@ -17,29 +18,54 @@ async function safeFetch(url: string, options?: RequestInit) {
 async function checkRequirements(
   cast: HiddenCastResponse,
   castId: { fid: number; hash: `0x${string}` } | undefined,
-  userKey: UserKey
+  makerUserKey: UserKey | null,
+  requesterUserKey: UserKey
 ) {
   const promises = [];
   const types: string[] = [];
+  const fid = makerUserKey?.userId
+    ? parseInt(makerUserKey.userId)
+    : castId?.fid;
+  if (fid && fid !== castId?.fid) {
+    return { ok: false, message: "This message has been stolen!" };
+  }
+  if (fid && fid === parseInt(requesterUserKey.userId, 10)) {
+    // if the maker is the requester, all requirements are met
+    return { ok: true };
+  }
+  if (cast.moxieFanTokensRequired && fid != null) {
+    const minTokens = cast.minMoxieFanTokens ?? 0;
+    const ok = await checkMoxieFanTokensRequirement(
+      fid,
+      parseInt(requesterUserKey.userId, 10),
+      minTokens
+    );
+    if (!ok) {
+      const message =
+        minTokens > 0
+          ? `You need at least ${minTokens} Moxie Fan Tokens to view the content.`
+          : "You need Moxie Fan Tokens to view the content.";
+      return {
+        ok: false,
+        message,
+      };
+    }
+  }
   if (cast.followRequired) {
     // follow
-    if (userKey.userId === castId?.fid?.toString()) {
-      promises.push(Promise.resolve(true));
-    } else {
-      promises.push(
-        safeFetch(
-          `${hubHttpUrl}/v1/linkById?fid=${userKey.userId}&target_fid=${castId?.fid}&link_type=follow`,
-          hubRequestOptions
-        ).then((res) => res.ok || userKey.userId === castId?.fid?.toString())
-      );
-    }
+    promises.push(
+      safeFetch(
+        `${hubHttpUrl}/v1/linkById?fid=${requesterUserKey.userId}&target_fid=${fid}&link_type=follow`,
+        hubRequestOptions
+      ).then((res) => res.ok || requesterUserKey.userId === fid?.toString())
+    );
     types.push("follow caster");
   }
   if (cast.likeRequired) {
     // like
     promises.push(
       safeFetch(
-        `${hubHttpUrl}/v1/reactionById?fid=${userKey.userId}&reaction_type=1&target_fid=${castId?.fid}&target_hash=${castId?.hash}`,
+        `${hubHttpUrl}/v1/reactionById?fid=${requesterUserKey.userId}&reaction_type=1&target_fid=${castId?.fid}&target_hash=${castId?.hash}`,
         hubRequestOptions
       ).then((res) => res.ok)
     );
@@ -48,7 +74,7 @@ async function checkRequirements(
   if (cast.recastRequired) {
     promises.push(
       safeFetch(
-        `${hubHttpUrl}/v1/reactionById?fid=${userKey.userId}&reaction_type=2&target_fid=${castId?.fid}&target_hash=${castId?.hash}`,
+        `${hubHttpUrl}/v1/reactionById?fid=${requesterUserKey.userId}&reaction_type=2&target_fid=${castId?.fid}&target_hash=${castId?.hash}`,
         hubRequestOptions
       ).then((res) => res.ok)
     );
@@ -92,7 +118,12 @@ const handleRequest = frames(async (ctx) => {
   }
 
   const requirements = reveal
-    ? await checkRequirements(hiddenCast, message?.castId, userKey)
+    ? await checkRequirements(
+        hiddenCast,
+        message?.castId,
+        hiddenCast.userKey,
+        userKey
+      )
     : null;
   if (requirements && !requirements.ok) {
     return error(requirements.message || "Requirements not met!");

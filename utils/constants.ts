@@ -13,7 +13,7 @@ export const externalBaseUrl = process.env["EXTERNAL_BASE_URL"] || baseUrl;
 
 const fallbackHubHttpUrl = isProduction
   ? undefined
-  : "http://localhost:18444/hub";
+  : "http://localhost:3010/hub";
 
 const airstackApiKey = process.env["AIRSTACK_API_KEY"];
 

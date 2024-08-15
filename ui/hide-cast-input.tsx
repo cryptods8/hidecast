@@ -70,7 +70,7 @@ interface ToastData {
   type?: "error" | "info";
 }
 
-export default function SpoilerInput({
+export default function HideCastInput({
   cast,
   userKey,
 }: {
@@ -86,6 +86,8 @@ export default function SpoilerInput({
   const [likeRequired, setLikeRequired] = useState(false);
   const [recastRequired, setRecastRequired] = useState(false);
   const [followRequired, setFollowRequired] = useState(false);
+  const [moxieFanTokensRequired, setMoxieFanTokensRequired] = useState(false);
+  const [minMoxieFanTokens, setMinMoxieFanTokens] = useState(0);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
@@ -114,6 +116,8 @@ export default function SpoilerInput({
         likeRequired,
         recastRequired,
         followRequired,
+        moxieFanTokensRequired,
+        minMoxieFanTokens,
       });
       if (res !== null) {
         setId(res.id);
@@ -161,10 +165,17 @@ export default function SpoilerInput({
     <form className="h-full">
       <div className="flex flex-col h-full gap-8 text-sm">
         <div className="flex flex-col gap-6">
+          <div>
+            <h2 className="font-space font-bold text-2xl">Hidecast</h2>
+            <span className="text-faint text-sm">
+              Hide a message in a frame behind Reveal button
+            </span>
+          </div>
+
           <div className="flex flex-col gap-2">
-            <label htmlFor="message" className="font-semibold">
+            {/* <label htmlFor="message" className="font-semibold">
               Cast message
-            </label>
+            </label> */}
             <textarea
               id="message"
               value={val}
@@ -201,7 +212,7 @@ export default function SpoilerInput({
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="font-semibold">Guard access to your cast</span>
+            <span className="font-semibold">Gate access to your message</span>
             <label className="flex gap-2 items-center">
               <input
                 className="size-6 accent-action-primary"
@@ -229,6 +240,33 @@ export default function SpoilerInput({
               />
               Follow required
             </label>
+            {cast && (
+              <label className="flex gap-2 items-center">
+                <input
+                  className="size-6 accent-action-primary"
+                  type="checkbox"
+                  checked={moxieFanTokensRequired}
+                  onChange={(e) => setMoxieFanTokensRequired(e.target.checked)}
+                />
+                Moxie Fan Tokens required
+              </label>
+            )}
+            {moxieFanTokensRequired && (
+              <div className="flex flex-row gap-3 items-center pl-8">
+                <label htmlFor="minMoxieFanTokens">Minimum required</label>
+                <input
+                  type="number"
+                  step="0.0001"
+                  min="0"
+                  id="minMoxieFanTokens"
+                  value={minMoxieFanTokens}
+                  onChange={(e) =>
+                    setMinMoxieFanTokens(parseFloat(e.target.value))
+                  }
+                  className="border border-default rounded p-2 bg-transparent w-24"
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-3 w-full items-center justify-end">
