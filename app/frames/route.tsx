@@ -143,6 +143,9 @@ const handleRequest = frames(async (ctx) => {
       >
         {reveal ? "Hide" : "Reveal"}
       </Button>,
+      <Button action="link" target={ctx.createExternalUrl("/")}>
+        Make my own
+      </Button>,
     ],
   };
 });
