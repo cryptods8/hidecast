@@ -39,6 +39,14 @@ export default function Home({ searchParams }: NextServerPageProps) {
     <main className="w-full">
       <div className="h-dvh w-full flex flex-col items-center">
         <div className="flex flex-col gap-4 max-w-full h-full p-8">
+          <div className="flex flex-row gap-3">
+            <div className="flex-1">
+              <h2 className="font-space font-bold text-2xl">Hidecast</h2>
+              <span className="text-faint text-sm">
+                Hide a message in a frame behind Reveal button
+              </span>
+            </div>
+          </div>
           <HideCastInput cast={cast} userKey={userKey} />
         </div>
       </div>

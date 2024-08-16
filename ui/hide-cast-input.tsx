@@ -165,12 +165,12 @@ export default function HideCastInput({
     <form className="h-full">
       <div className="flex flex-col h-full gap-8 text-sm">
         <div className="flex flex-col gap-6">
-          <div>
+          {/* <div>
             <h2 className="font-space font-bold text-2xl">Hidecast</h2>
             <span className="text-faint text-sm">
               Hide a message in a frame behind Reveal button
             </span>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-2">
             {/* <label htmlFor="message" className="font-semibold">
@@ -240,16 +240,24 @@ export default function HideCastInput({
               />
               Follow required
             </label>
-            {cast && (
-              <label className="flex gap-2 items-center">
-                <input
-                  className="size-6 accent-action-primary"
-                  type="checkbox"
-                  checked={moxieFanTokensRequired}
-                  onChange={(e) => setMoxieFanTokensRequired(e.target.checked)}
-                />
-                Moxie Fan Tokens required
-              </label>
+            <label
+              className={`flex gap-2 items-center ${
+                userKey ? "" : "text-faint"
+              }`}
+            >
+              <input
+                className="size-6 accent-action-primary"
+                type="checkbox"
+                checked={moxieFanTokensRequired}
+                onChange={(e) => setMoxieFanTokensRequired(e.target.checked)}
+                disabled={!userKey}
+              />
+              Moxie Fan Tokens required
+            </label>
+            {!userKey && (
+              <span className="pl-8 text-faint text-xs">
+                Sign In to gate your message by Moxie Fan Tokens
+              </span>
             )}
             {moxieFanTokensRequired && (
               <div className="flex flex-row gap-3 items-center pl-8">
@@ -291,7 +299,7 @@ export default function HideCastInput({
           {submitted && (
             <div className="w-full">
               <div className="text-xs text-faint">
-                Hidden cast submitted to:
+                Hidden message submitted to:
               </div>
               <a className="underline hover:opacity-80" href={generateUrl(id)}>
                 {generateUrl(id)}

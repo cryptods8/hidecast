@@ -85,6 +85,10 @@
   }
 }
 
+.fc-authkit-signin-button > button {
+  font-size: 15px;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-end-rgb));

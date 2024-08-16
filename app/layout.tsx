@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
+import "@farcaster/auth-kit/styles.css";
 
 export const metadata: Metadata = {
   title: "Hidecast by ds8",
