@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { options } from "./options";
 import { parseCastMessage } from "@/utils/hide-cast-utils";
 
+export const dynamic = "force-dynamic";
+
 function primaryColor(alpha?: number) {
   return `rgba(23, 16, 31, ${alpha ?? 0.87})`;
 }

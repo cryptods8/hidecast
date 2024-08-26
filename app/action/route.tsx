@@ -10,7 +10,7 @@ export const GET = async () => {
     icon: "eye-closed",
     name: "Hidecast",
     aboutUrl: `${externalBaseUrl}`,
-    description: "Hide a cast behind Reveal button",
+    description: "Hide cast in frame",
     // @ts-ignore
     imageUrl: `${externalBaseUrl}/logo.png`,
   });
