@@ -70,6 +70,15 @@ interface ToastData {
   type?: "error" | "info";
 }
 
+function isValidUrl(url: string) {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export default function HideCastInput({
   cast,
   userKey,
@@ -78,6 +87,7 @@ export default function HideCastInput({
   userKey?: UserKey;
 }) {
   const [val, setVal] = useState(cast?.text || "");
+  const [url, setUrl] = useState(cast?.embeds[0] || "");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [id, setId] = useState("");
@@ -92,6 +102,11 @@ export default function HideCastInput({
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
     setVal(v);
+  };
+
+  const handleUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    setUrl(v?.trim());
   };
 
   const handleClear = () => {
@@ -118,6 +133,7 @@ export default function HideCastInput({
         followRequired,
         moxieFanTokensRequired,
         minMoxieFanTokens,
+        url,
       });
       if (res !== null) {
         setId(res.id);
@@ -160,6 +176,7 @@ export default function HideCastInput({
   };
 
   const castMessage = parseCastMessage(val);
+  const validUrl = url && isValidUrl(url);
 
   return (
     <form className="h-full">
@@ -208,6 +225,23 @@ export default function HideCastInput({
                   {castMessage.length} / {MAX_CHAR}
                 </span>
               </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="url" className="font-semibold">
+              URL
+            </label>
+            <input
+              type="url"
+              id="url"
+              value={url}
+              onChange={handleUrlChange}
+              className="border border-default rounded p-2 bg-transparent w-full"
+            />
+            <div className="text-xs text-faint">
+              You can optionally provide a URL that will be shown to the user on
+              successful reveal
             </div>
           </div>
 

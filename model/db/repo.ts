@@ -10,6 +10,9 @@ export async function saveHiddenCast(
     likeRequired: cast.likeRequired,
     recastRequired: cast.recastRequired,
     followRequired: cast.followRequired,
+    moxieFanTokensRequired: cast.moxieFanTokensRequired,
+    minMoxieFanTokens: cast.minMoxieFanTokens,
+    url: cast.url,
   };
   await pgDb
     .insertInto("hiddenCast")

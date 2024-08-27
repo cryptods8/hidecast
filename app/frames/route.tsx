@@ -129,6 +129,19 @@ const handleRequest = frames(async (ctx) => {
     return error(requirements.message || "Requirements not met!");
   }
 
+  console.log("hiddenCast", hiddenCast);
+  let hiddenUrl = hiddenCast.url && reveal ? hiddenCast.url : undefined;
+  if (hiddenUrl && userKey) {
+    try {
+      const urlObj = new URL(hiddenUrl);
+      urlObj.searchParams.set("hc_fid", userKey?.userId ?? "");
+      hiddenUrl = urlObj.toString();
+    } catch (e) {
+      console.error("Failed to parse hiddenUrl", e);
+      hiddenUrl = undefined;
+    }
+  }
+
   return {
     image: ctx.createSignedUrl({
       pathname: "/frames/image",
@@ -143,9 +156,23 @@ const handleRequest = frames(async (ctx) => {
       >
         {reveal ? "Hide" : "Reveal"}
       </Button>,
-      <Button action="link" target={ctx.createExternalUrl("/")}>
-        Make my own
-      </Button>,
+      hiddenCast.userKey && hiddenCast.moxieFanTokensRequired ? (
+        <Button
+          action="post"
+          target={`https://moxie-frames.airstack.xyz/stim?t=fid_${hiddenCast.userKey?.userId}&__bi=2-p`}
+        >
+          Fan Tokens
+        </Button>
+      ) : null,
+      hiddenUrl ? (
+        <Button action="link" target={hiddenUrl}>
+          Go
+        </Button>
+      ) : (
+        <Button action="link" target={ctx.createExternalUrl("/")}>
+          Make my own
+        </Button>
+      ),
     ],
   };
 });
