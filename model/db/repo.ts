@@ -1,18 +1,21 @@
 import { HiddenCastRequest, HiddenCastResponse } from "../types";
 import { pgDb } from "./pg-db";
 import { v4 as uuid } from "uuid";
+import { MessagePropsColumn } from "./types";
 
 export async function saveHiddenCast(
   cast: HiddenCastRequest
 ): Promise<HiddenCastResponse> {
   const id = uuid();
-  const messageProps = {
+  const messageProps: MessagePropsColumn = {
     likeRequired: cast.likeRequired,
     recastRequired: cast.recastRequired,
     followRequired: cast.followRequired,
     moxieFanTokensRequired: cast.moxieFanTokensRequired,
     minMoxieFanTokens: cast.minMoxieFanTokens,
     url: cast.url,
+    passwordRequired: cast.passwordRequired,
+    password: cast.password,
   };
   await pgDb
     .insertInto("hiddenCast")

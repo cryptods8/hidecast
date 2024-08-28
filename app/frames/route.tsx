@@ -19,7 +19,8 @@ async function checkRequirements(
   cast: HiddenCastResponse,
   castId: { fid: number; hash: `0x${string}` } | undefined,
   makerUserKey: UserKey | null,
-  requesterUserKey: UserKey
+  requesterUserKey: UserKey,
+  inputText: string | null | undefined
 ) {
   const promises = [];
   const types: string[] = [];
@@ -50,6 +51,12 @@ async function checkRequirements(
         message,
       };
     }
+  }
+  if (cast.passwordRequired && inputText !== cast.password) {
+    return {
+      ok: false,
+      message: "Incorrect password!",
+    };
   }
   if (cast.followRequired) {
     // follow
@@ -122,17 +129,21 @@ const handleRequest = frames(async (ctx) => {
         hiddenCast,
         message?.castId,
         hiddenCast.userKey,
-        userKey
+        userKey,
+        message?.inputText
       )
     : null;
   if (requirements && !requirements.ok) {
     return error(requirements.message || "Requirements not met!");
   }
 
-  console.log("hiddenCast", hiddenCast);
   let hiddenUrl = hiddenCast.url && reveal ? hiddenCast.url : undefined;
   if (hiddenUrl && userKey) {
     try {
+      // add https if missing
+      if (!hiddenUrl.startsWith("https://")) {
+        hiddenUrl = "https://" + hiddenUrl;
+      }
       const urlObj = new URL(hiddenUrl);
       urlObj.searchParams.set("hc_fid", userKey?.userId ?? "");
       hiddenUrl = urlObj.toString();
@@ -147,6 +158,10 @@ const handleRequest = frames(async (ctx) => {
       pathname: "/frames/image",
       query: { id, reveal: reveal ? "true" : "false" },
     }),
+    textInput:
+      hiddenCast.passwordRequired && !reveal
+        ? "Enter password to reveal"
+        : undefined,
     buttons: [
       <Button
         action="post"

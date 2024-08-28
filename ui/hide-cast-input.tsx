@@ -98,6 +98,8 @@ export default function HideCastInput({
   const [followRequired, setFollowRequired] = useState(false);
   const [moxieFanTokensRequired, setMoxieFanTokensRequired] = useState(false);
   const [minMoxieFanTokens, setMinMoxieFanTokens] = useState(0);
+  const [passwordRequired, setPasswordRequired] = useState(false);
+  const [password, setPassword] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const v = e.target.value;
@@ -134,6 +136,8 @@ export default function HideCastInput({
         moxieFanTokensRequired,
         minMoxieFanTokens,
         url,
+        passwordRequired,
+        password,
       });
       if (res !== null) {
         setId(res.id);
@@ -306,6 +310,26 @@ export default function HideCastInput({
                     setMinMoxieFanTokens(parseFloat(e.target.value))
                   }
                   className="border border-default rounded p-2 bg-transparent w-24"
+                />
+              </div>
+            )}
+            <label className="flex gap-2 items-center">
+              <input
+                className="size-6 accent-action-primary"
+                type="checkbox"
+                checked={passwordRequired}
+                onChange={(e) => setPasswordRequired(e.target.checked)}
+              />
+              Password required
+            </label>
+            {passwordRequired && (
+              <div className="flex w-full gap-2 pl-8">
+                <input
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="border border-default rounded p-2 bg-transparent w-full"
+                  placeholder="Enter password"
                 />
               </div>
             )}

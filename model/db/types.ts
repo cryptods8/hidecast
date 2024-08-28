@@ -19,6 +19,8 @@ export interface MessagePropsColumn {
   moxieFanTokensRequired: boolean | null | undefined;
   minMoxieFanTokens: number | null | undefined;
   url: string | null | undefined;
+  passwordRequired: boolean | null | undefined;
+  password: string | null | undefined;
 }
 
 type MessagePropsColumnType = JSONColumnType<MessagePropsColumn>;
