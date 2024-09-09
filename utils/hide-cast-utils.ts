@@ -9,6 +9,8 @@ export interface CastMessage {
 }
 
 export const HIDE_CAST_INDICATOR = "//";
+export const MAX_CHAR = 200;
+
 
 export function toPlainMessage(parts: CastMessagePart[]): string {
   return parts.reduce((acc, p) => {

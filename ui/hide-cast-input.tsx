@@ -6,10 +6,12 @@ import {
   HiddenCastResponse,
   UserKey,
 } from "@/model/types";
-import { parseCastMessage, HIDE_CAST_INDICATOR } from "@/utils/hide-cast-utils";
+import {
+  parseCastMessage,
+  HIDE_CAST_INDICATOR,
+  MAX_CHAR,
+} from "@/utils/hide-cast-utils";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-
-const MAX_CHAR = 140;
 
 const saveCast = async (
   request: HiddenCastRequest
@@ -183,7 +185,7 @@ export default function HideCastInput({
   const validUrl = url && isValidUrl(url);
 
   return (
-    <form className="h-full">
+    <form className="max-h-full overflow-y-auto">
       <div className="flex flex-col h-full gap-8 text-sm">
         <div className="flex flex-col gap-6">
           {/* <div>
@@ -231,6 +233,17 @@ export default function HideCastInput({
               </div>
             </div>
           </div>
+
+          {/* {val && (
+            <div className="flex flex-col gap-2">
+              <div className="font-semibold">Preview</div>
+              <img
+                src={"/frames/image?msg=" + val + "&preview=true"}
+                style={{ aspectRatio: "1.91/1" }}
+                className="rounded-lg"
+              />
+            </div>
+          )} */}
 
           <div className="flex flex-col gap-2">
             <label htmlFor="url" className="font-semibold">

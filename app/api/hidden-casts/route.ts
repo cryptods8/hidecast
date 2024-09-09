@@ -1,6 +1,6 @@
 import { findHiddenCastById, saveHiddenCast } from "@/model/db/repo";
 import { HiddenCastRequest } from "@/model/types";
-import { trimMessage } from "@/utils/hide-cast-utils";
+import { MAX_CHAR, trimMessage } from "@/utils/hide-cast-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
   const hiddenCast = await saveHiddenCast({
     ...payload,
-    message: trimMessage(payload.message, 140),
+    message: trimMessage(payload.message, MAX_CHAR),
   });
 
   return NextResponse.json(hiddenCast, { status: 201 });

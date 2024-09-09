@@ -13,9 +13,9 @@ function primaryColor(alpha?: number) {
   return `rgba(23, 16, 31, ${alpha ?? 0.87})`;
 }
 
-function Message({ shown, cast }: { shown: boolean; cast: HideCastResponse }) {
-  const message = parseCastMessage(cast.message);
-  const { parts } = message;
+function Message({ shown, message }: { shown: boolean; message: string }) {
+  const pm = parseCastMessage(message);
+  const { parts } = pm;
   const redactedMessage = parts.reduce((acc, part) => {
     const text =
       part.isHidden && !shown ? part.text.replaceAll(/./g, "​_") : part.text;
@@ -72,10 +72,20 @@ function verifyUrl(req: NextRequest, allowedQueryParams: string[]) {
 }
 
 export async function GET(req: NextRequest) {
-  verifyUrl(req, ["id", "reveal"]);
   const { searchParams } = req.nextUrl;
+  const preview = searchParams.get("preview") === "true";
+  const message = searchParams.get("msg");
+  if (preview && message) {
+    return new ImageResponse(
+      <Message shown={false} message={message} />,
+      options
+    );
+  }
+
   const reveal = searchParams.get("reveal") === "true";
   const id = searchParams.get("id");
+
+  verifyUrl(req, ["id", "reveal"]);
   if (!id) {
     return NextResponse.json({ message: "No id provided" }, { status: 400 });
   }
@@ -83,5 +93,8 @@ export async function GET(req: NextRequest) {
   if (!spoiler) {
     return NextResponse.json({ message: "Spoiler not found" }, { status: 404 });
   }
-  return new ImageResponse(<Message shown={reveal} cast={spoiler} />, options);
+  return new ImageResponse(
+    <Message shown={reveal} message={spoiler.message} />,
+    options
+  );
 }
