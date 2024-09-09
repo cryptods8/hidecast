@@ -44,8 +44,8 @@ async function checkRequirements(
     if (!ok) {
       const message =
         minTokens > 0
-          ? `You need at least ${minTokens} Moxie Fan Tokens to view the content.`
-          : "You need Moxie Fan Tokens to view the content.";
+          ? `You need at least ${minTokens} caster's Moxie Fan Tokens to view the content.`
+          : "You need caster's Moxie Fan Tokens to view the content.";
       return {
         ok: false,
         message,
@@ -174,7 +174,7 @@ const handleRequest = frames(async (ctx) => {
       hiddenCast.userKey && hiddenCast.moxieFanTokensRequired ? (
         <Button
           action="post"
-          target={`https://moxie-frames.airstack.xyz/stim?t=fid_${hiddenCast.userKey?.userId}&__bi=2-p`}
+          target={`https://moxie-frames.airstack.xyz/stim?t=fid_${hiddenCast.userKey?.userId}`}
         >
           Fan Tokens
         </Button>
