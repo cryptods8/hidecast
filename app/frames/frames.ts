@@ -129,9 +129,9 @@ export const createCustomFrames = (options: { basePath: string }) =>
   createFrames({
     basePath: options.basePath,
     middleware: [
-      userKeyMiddleware,
       urlBuilderMiddleware,
       validationMiddleware,
+      userKeyMiddleware,
       warpcastComposerActionState(),
     ],
   });
